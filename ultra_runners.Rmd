@@ -1,0 +1,34 @@
+---
+title: "Tidy Tuesday Ultra Runners"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(lubridate)
+```
+
+```{r}
+ultra_rankings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-26/ultra_rankings.csv')
+
+race <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-10-26/race.csv')
+```
+
+```{r}
+race_df <- race %>% 
+  mutate(year = as.character(year(date))) %>% 
+  group_by(year) %>% 
+  summarize(Count = n())
+
+ggplot(race_df, aes(Year, Count, fill=Count)) +
+  geom_bar(stat='identity') +
+  scale_fill_gradient(low="#003cb3", high="#e63900") +
+  geom_text(aes(label = Count, vjust = -.3)) +
+  theme_classic() +
+  ggtitle("Number of Ultra Running Events Each Year") +
+  labs(x = '', y = '') +
+  theme(legend.position='none',
+        plot.title = element_text(hjust=0.5))
+```
+
+
